@@ -2,7 +2,7 @@
 # Makeover Monday - Week 5
 
 ### Original visualization
-![Original visualization](https://pbs.twimg.com/profile_images/562466745340817408/_nIu8KHX.jpeg)
+![Original visualization](https://raw.githubusercontent.com/robcrock/profit_per_second/master/original_viz.png)
 
 Ever wonder how much the richest companies in the world make... by the second? Well, TitleMax (not sure why) collected the data and presenteded it in an interesting infographic. 
 
@@ -32,12 +32,8 @@ This project would be what it is without the efforts of [Andy Kriebel](https://t
 I depended in the D3 community more than ever this week. The dataset and what I was trying to accomplish was very difficult for me. If you're working with D3 I can't recommend joining the [Slack](https://d3-slackin.herokuapp.com/) channel enough. I asked them countless questions.
 
 Big shout out to:
-* [Fil](https://twitter.com/recifs)
-* [Stefan](https://twitter.com/stefanjudis)
-* [Daniel Overstreet](https://twitter.com/dhoboy)
-* [DashingD3](https://www.dashingd3js.com/lessons/geojson)
-* [Zevross](http://zevross.com/blog/2014/09/30/use-the-amazing-d3-library-to-animate-a-path-on-a-leaflet-map/)
-* [MapShaper](http://mapshaper.org/)
+* [Nadieh](https://twitter.com/NadiehBremer)
+	* [Create a gooey effect](https://www.visualcinnamon.com/2015/05/gooey-effect.html)
 
 ### Built With
 
