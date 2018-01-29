@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <meta name="viewport" content="width=625px, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <style>
+    .container {
+      width: 960 !important;
+    }
+  </style>
+  <title>[INSERT UNIQUE TITLE]</title>
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <h1>Title Text</h1>
+      <h5>Subtitle Text</h5>
+    </div>
+    <div class="row chart-container"></div>
+    <div class="row">
+      <div class="s6 left">SOURCE | <a href='datasourceurl.com'>Link to data source</a></div>
+      <div class="s6 right right-align">DESIGN | <a href='socialurl.com'>Link to Twitter</a></div>
+    </div>
+  </div>
+  <script>
+    d3.csv('data.csv', (error, data) => {
+
+      if (error) {
+        return console.warn(error);
+      }
+
+      const outerWidth = 960,
+        outerHeight = 420,
+        margin = { top: 20, right: 10, bottom: 20, left: 20 };
+
+      const innerWidth = outerWidth - margin.left - margin.right,
+        innerHeight = outerHeight - margin.top - margin.bottom;
+
+      var svg = d3.select('.chart-container').append('svg')
+          .attr('width', outerWidth)
+          .attr('height', outerHeight)
+        .append('g')
+          .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+          .attr('fill', '#ccc');
+
+      svg.append('text')
+          .text('MakeoverMonday Visualization')
+          .attr('x', innerWidth / 2)
+          .attr('y', innerHeight / 2)  
+          .attr('color', '#666')
+          .style('font-family', 'Roboto')
+          .style('font-size', '36px')
+          .style('text-anchor', 'middle')
+          .style('alignment-baseline', 'middle');
+
+    })
+  </script>
+  <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+</body>
+
+</html>
