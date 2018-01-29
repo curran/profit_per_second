@@ -34,6 +34,8 @@ I depended in the D3 community more than ever this week. The dataset and what I 
 Big shout out to:
 * [Nadieh](https://twitter.com/NadiehBremer)
 	* [Create a gooey effect](https://www.visualcinnamon.com/2015/05/gooey-effect.html)
+* [Force Piles](https://bl.ocks.org/tlfrd/59477ab8c350753c88d70e50a18424fb)
+* [Force Extent](https://github.com/d3/d3-force/issues/89)
 
 ### Built With
 
