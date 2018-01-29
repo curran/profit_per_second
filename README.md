@@ -36,6 +36,7 @@ Big shout out to:
 	* [Create a gooey effect](https://www.visualcinnamon.com/2015/05/gooey-effect.html)
 * [Force Piles](https://bl.ocks.org/tlfrd/59477ab8c350753c88d70e50a18424fb)
 * [Force Extent](https://github.com/d3/d3-force/issues/89)
+* [Gooey Grid](https://bl.ocks.org/tlfrd/af94702a0b13ff7d0a491d5cbc1338f2)
 
 ### Built With
 
