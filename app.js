@@ -6,75 +6,75 @@ var margin = { top: 30, right: 30, bottom: 30, left: 30 };
 ///////////////////////////////////////////////////////// Nahdie's Gooey Example
 ////////////////////////////////////////////////////////////////////////////////
 
-  //Create scale
-  var xScale = d3.scaleLinear()
-    .domain([0, 1])
-    .range([0, width]);
+  // //Create scale
+  // var xScale = d3.scaleLinear()
+  //   .domain([0, 1])
+  //   .range([0, width]);
 
-  //Create SVG
-  var svg = d3.select(".chart").append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-    .style("filter", "url(#gooey)") //Set the filter on the container svg
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+  // //Create SVG
+  // var svg = d3.select(".chart").append("svg")
+  //   .attr("width", width + margin.left + margin.right)
+  //   .attr("height", height + margin.top + margin.bottom)
+  //   .append("g")
+  //   .style("filter", "url(#gooey)") //Set the filter on the container svg
+  //   .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-  //SVG filter for the gooey effect
-  //Code taken from http://tympanus.net/codrops/2015/03/10/creative-gooey-effects/
-  var defs = svg.append('defs');
-  var filter = defs.append('filter').attr('id', 'gooey');
-  filter.append('feGaussianBlur')
-    .attr('in', 'SourceGraphic')
-    .attr('stdDeviation', '10')
-    .attr('result', 'blur');
-  filter.append('feColorMatrix')
-    .attr('in', 'blur')
-    .attr('mode', 'matrix')
-    .attr('values', '1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7')
-    .attr('result', 'gooey');
-  filter.append('feComposite')
-    .attr('in', 'SourceGraphic')
-    .attr('in2', 'goo')
-    .attr('operator', 'atop');
+  // //SVG filter for the gooey effect
+  // //Code taken from http://tympanus.net/codrops/2015/03/10/creative-gooey-effects/
+  // var defs = svg.append('defs');
+  // var filter = defs.append('filter').attr('id', 'gooey');
+  // filter.append('feGaussianBlur')
+  //   .attr('in', 'SourceGraphic')
+  //   .attr('stdDeviation', '10')
+  //   .attr('result', 'blur');
+  // filter.append('feColorMatrix')
+  //   .attr('in', 'blur')
+  //   .attr('mode', 'matrix')
+  //   .attr('values', '1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7')
+  //   .attr('result', 'gooey');
+  // filter.append('feComposite')
+  //   .attr('in', 'SourceGraphic')
+  //   .attr('in2', 'goo')
+  //   .attr('operator', 'atop');
 
-  //Append circle at center
-  svg.append("circle")
-    .attr("class", "centerCircle")
-    .attr("cx", 0)
-    .attr("cy", 0)
-    .attr("r", 20)
-    .style("fill", "#81BC00");
+  // //Append circle at center
+  // svg.append("circle")
+  //   .attr("class", "centerCircle")
+  //   .attr("cx", 0)
+  //   .attr("cy", 0)
+  //   .attr("r", 20)
+  //   .style("fill", "#81BC00");
 
-  //Create a circle that will move out of the center circle
-  svg.append("circle")
-    .attr("class", "flyCircle")
-    .attr("cx", 0)
-    .attr("cy", 0)
-    .attr("r", 15)
-    .style("fill", "#81BC00")
-    .each(update);
+  // //Create a circle that will move out of the center circle
+  // svg.append("circle")
+  //   .attr("class", "flyCircle")
+  //   .attr("cx", 0)
+  //   .attr("cy", 0)
+  //   .attr("r", 15)
+  //   .style("fill", "#81BC00")
+  //   .each(update);
 
-  //Continuously keep a circle flying out to a random location along the x-axis
-  function update() {
-    const circle = d3.selectAll(".flyCircle");
-    const t1 = d3.transition()
-      .duration(1500)
-      .ease(d3.easeLinear);
-    const t2 = d3.transition()
-      .duration(1000)
-      .ease(d3.easeLinear);
+  // //Continuously keep a circle flying out to a random location along the x-axis
+  // function update() {
+  //   const circle = d3.selectAll(".flyCircle");
+  //   const t1 = d3.transition()
+  //     .duration(1500)
+  //     .ease(d3.easeLinear);
+  //   const t2 = d3.transition()
+  //     .duration(1000)
+  //     .ease(d3.easeLinear);
 
-    (function repeat() {
-      circle
-        .attr("cx", 0)
-        .attr("r", 15)
-        .transition(t1).duration(1500)
-        .attr("cx", xScale(Math.random()))
-        .transition(t2).duration(1000)
-        .attr("r", 0)
-        .on("end", repeat);
-    })();
-  }//update
+  //   (function repeat() {
+  //     circle
+  //       .attr("cx", 0)
+  //       .attr("r", 15)
+  //       .transition(t1).duration(1500)
+  //       .attr("cx", xScale(Math.random()))
+  //       .transition(t2).duration(1000)
+  //       .attr("r", 0)
+  //       .on("end", repeat);
+  //   })();
+  // }//update
 
 
 ////////////////////////////////////////////////////////////////////////////////

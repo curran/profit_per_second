@@ -34,9 +34,16 @@ I depended in the D3 community more than ever this week. The dataset and what I 
 Big shout out to:
 * [Nadieh](https://twitter.com/NadiehBremer)
 	* [Create a gooey effect](https://www.visualcinnamon.com/2015/05/gooey-effect.html)
+	* [Andvanced gooey](https://www.visualcinnamon.com/2016/06/fun-data-visualizations-svg-gooey-effect.html)
 * [Force Piles](https://bl.ocks.org/tlfrd/59477ab8c350753c88d70e50a18424fb)
 * [Force Extent](https://github.com/d3/d3-force/issues/89)
 * [Gooey Grid](https://bl.ocks.org/tlfrd/af94702a0b13ff7d0a491d5cbc1338f2)
+* [Interactive Force](https://medium.com/ninjaconcept/interactive-dynamic-force-directed-graphs-with-d3-da720c6d7811)
+* [svg2D3](http://billautomata.github.io/svg2d3/)
+* [d3v3 to v4](https://iros.github.io/d3-v4-whats-new/#31)
+* [The life of a transition](https://github.com/d3/d3-transition#the-life-of-a-transition)
+* [Force docs](https://github.com/d3/d3-force)
+* [Understanding the force](https://medium.com/@sxywu/understanding-the-force-ef1237017d5)
 
 ### Built With
 
