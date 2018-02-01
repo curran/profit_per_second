@@ -27,6 +27,18 @@ d3.csv('data.csv', (error, data) => {
     .attr('r', 100)
     .on('click', startDrip);
 
+  chartG.append('text')
+    .attr('x', 50)
+    .attr('y', 50)
+    .attr('dx', 50)
+    .attr('dy', 50)
+    .attr('font-family', 'Roboto')
+    .attr('font-size', 35)
+    .attr('text-anchor', 'middle')
+    .attr('stroke', '#ffffff')
+    .attr('fill', '#ffffff')
+    .text('I\'m a button');
+
   // Create our node array
   const companyArray = data.map(function(d) {
     return {
@@ -34,7 +46,7 @@ d3.csv('data.csv', (error, data) => {
       'rank': parseInt(d.company_rank),
       'net_income': parseInt(d.net_income),
       'profit_per_second': parseFloat(d.profit_per_second),
-      'x': innerWidth / 3,
+      'x': innerWidth / 2,
       'y': 0
     }
   })
@@ -72,25 +84,23 @@ d3.csv('data.csv', (error, data) => {
   let node = chartG.selectAll('.node');
   console.log(node);
 
+  restartSim()
+
   function layoutTick() {
     node
       .attr('cx', innerWidth / 2)
       .attr('cy', d => d.y);
   }
 
-  function restart() {
+  function restartSim() {
     // Apply the general update pattern to the nodes.
-    node = node
-      .data(nodes);
+    node = node.data(nodes);
     console.log(node);
-    // node
-    //   .exit().remove();
-    node = node
-      .enter().append("circle")
+    node.exit().remove();
+    node = node.enter().append("circle")
       .attr('r', d => circleRadius(d.profit_per_second))
       .attr('opacity', .1)
       .attr('stroke', '#cccccc')
-      // .attr("r", d => circleRadius(d.profit_per_second))
       .merge(node);
     // Update and restart the simulation.
     simulation
@@ -103,16 +113,17 @@ d3.csv('data.csv', (error, data) => {
   let intervalID;
   let companyNode;
   function startDrip(e) {
+    let node = companyArray[counter];
     // toggle click class onto the button
     this.classList.toggle('clicked');
     companyNode = companyArray[counter];
     if (this.classList.contains('clicked')) {
       // start interval
       intervalID = setInterval(function (d) {
-        companyNode.y = 0
-        let node = companyNode;
-        nodes.push(node);
-        restart()
+        node.x = innerHeight / 2;
+        node.y = 0;
+        let n = nodes.push(node);
+        restartSim()
       }, 1000);
     } else {
       // end interval
