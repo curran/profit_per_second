@@ -44,6 +44,7 @@ Big shout out to:
 * [The life of a transition](https://github.com/d3/d3-transition#the-life-of-a-transition)
 * [Force docs](https://github.com/d3/d3-force)
 * [Understanding the force](https://medium.com/@sxywu/understanding-the-force-ef1237017d5)
+* [Modified force](https://bl.ocks.org/mbostock/1095795)
 
 ### Built With
 
