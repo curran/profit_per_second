@@ -1,85 +1,161 @@
 // document.addEventListener('click', toggleDrip);
 
+// Set up the D3 margin convention
 const margin = { top: 50, right: 50, bottom: 50, left: 50 }
 const outerWidth = 960;
 const outerHeight = 500;
 const innerWidth = outerWidth - margin.left - margin.right;
 const innerHeight = outerHeight - margin.top - margin.bottom;
-
+// Append an SVG viewport for our chart
 const svg = d3.select('.chart')
   .append('svg')
     .attr('width', outerWidth)
     .attr('height', outerHeight);
-
+// Append a group element that positions our chart within the SVG
 const chartG = svg.append('g')
   .attr('transform', `translate(${margin.left},${margin.top})`)
-
+// Access our data
 d3.csv('data.csv', (error, data) => {
   if(error) throw error;
-
-  let nodes = data.map(function(d) {
+  // Create our node array
+  const companyArray = data.map(function(d) {
     return {
       'company': d.company,
       'rank': parseInt(d.company_rank),
       'net_income': parseInt(d.net_income),
-      'profit_per_second': parseFloat(d.profit_per_second)
+      'profit_per_second': parseFloat(d.profit_per_second),
+      'x': innerWidth / 2,
+      'y': 0
     }
   })
-
-  console.log('Nodes ', nodes);
-
-  const profitExtent = d3.extent(nodes, d => d.profit_per_second);
-
-  console.log('Profit extent ', profitExtent);
-
+  // What's the extent of our profit we'll use as our circel radius
+  const profitExtent = d3.extent(companyArray, d => d.profit_per_second);
+  // Calculate the max area to be used in the range of our scale
   const maxCircleArea = Math.PI * Math.pow(50, 2);
+  // Create the scale to be used in our circle radius function
   const circleAreaScale = d3.scaleLinear()
     .domain(profitExtent)
     .range([0, maxCircleArea]);
-  
-  console.log('Circle area ', circleAreaScale(500));
-
+  // Calculate a circle radius based on the area scale
   function circleRadius(d) {
     let area;
     area = circleAreaScale(d);
     return Math.sqrt(area / Math.PI);
   };
-
-  console.log('Circle radius ', circleRadius(500));
-
-  const numberOfNodes = nodes.length;
-
-  console.log('Number of nodes ', numberOfNodes);
-
-  const transitionEase = d3.easeExp;
-  
-  const node = chartG.selectAll('circle')
-    .data(nodes)
-    .enter().append('circle')
-    .attr('cx', (d, i) => 10 * i)
-    .attr('cy', 10)
-    .attr('r', d => circleRadius(d.profit_per_second));
+  // Add the mousedown event to our SVG group
+  svg
+    .on('mousedown', mousedown);
+  // Set counter to keep track of clicks
+  let counter = 0
+  // let node = chartG.selectAll('circle');
+    // .data(nodes)
+    // .enter().append('circle')
+    // .on("mousedown", mousedown);
 
   // Set the width of where circle will fall
   const pileExtent = [[0, innerWidth], [0, innerHeight]];
   // Create the simulation to move your nodes around 
   var simulation = d3.forceSimulation()
-    .force("extent", d3.forceExtent(pileExtent))
-    .force("collide", d => d3.forceCollide(circleRadius.net_income))
-    .force("center", d3.forceCenter()
-      .x(innerWidth * .5)
-      .y(innerHeight))
-    .force('bounce', d3.forceBounce()
-      .radius(d => circleRadius(d.profit_per_second))
-    )
-    .on('tick', layoutTick)
-    .nodes(nodes);
+    .force("charge", d3.forceManyBody().strength(-1000))
+    .force("x", d3.forceX())
+    .force("y", d3.forceY())
+    // .force("extent", d3.forceExtent(pileExtent))
+    // .force('charge', d3.forceManyBody())
+    // .force('collide', d => d3.forceCollide(d => circleRadius(d.profit_per_second)))
+    // .force('center', d3.forceCenter()
+    //   .x(innerWidth * .5)
+    //   .y(innerHeight))
+    // .force('bounce', d3.forceBounce()
+    //   .radius(5)
+    // )
+    .on('tick', layoutTick);
+
+  let nodes = simulation.nodes(),
+    node = chartG.selectAll('.node');
+
+  function mousedown() {
+    let node = companyArray[counter],
+      n = nodes.push(node);
+    restart();
+    counter++;
+  }
 
   function layoutTick(e) {
+    console.log('before ', node);
     node
-      .attr('cx', function (d) { return d.x; })
-      .attr('cy', function (d) { return d.y; });
+      .attr('cx', d => d.x)
+      .attr('cy', d => d.y);
+    console.log('after ', node);
   }
+
+  let circles;
+
+  function restart() {
+
+    if(counter !== 0) {
+      circles.remove()
+    }
+
+    node = node.data(nodes);
+
+    circles = node.enter().insert("circle");
+
+    circles
+      .attr("class", "node")
+      .attr('cx', innerWidth / 2)
+      .attr('cy', 0)
+      .attr("r", d => circleRadius(d.profit_per_second))
+      .attr('opacity', .15);
+
+    simulation.restart();
+  }
+
+  // mbostock's example of add circles to the force on mousedown
+  // var force = d3.layout.force()
+  //   .size([width, height])
+  //   .nodes([{}]) // initialize with a single node
+  //   .charge(-10)
+  //   .on("tick", tick);
+
+  // var svg = d3.select("body").append("svg")
+  //   .attr("width", width)
+  //   .attr("height", height)
+  //   .on("mousedown", mousedown);
+
+  // svg.append("rect")
+  //   .attr("width", width)
+  //   .attr("height", height);
+
+  // var nodes = force.nodes(),
+  //   node = svg.selectAll(".node");
+
+  // var cursor = svg.append("circle")
+  //   .attr("r", 30)
+  //   .attr("transform", "translate(-100,-100)");
+
+  // restart();
+
+  // function mousedown() {
+  //   var node = { x: width / 2, y: 0 },
+  //     n = nodes.push(node);
+  //   restart();
+  // }
+
+  // function tick() {
+  //   node.attr("cx", function (d) { return d.x; })
+  //     .attr("cy", function (d) { return d.y; });
+  // }
+
+  // function restart() {
+
+  //   node = node.data(nodes);
+
+  //   node.enter().insert("circle")
+  //     .attr("class", "node")
+  //     .attr("r", 5);
+
+  //   force.start();
+  // }
 })
 
 ////////////////////////////////////////////////////////////////////////////////
