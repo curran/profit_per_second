@@ -18,6 +18,14 @@ const chartG = svg.append('g')
 // Access our data
 d3.csv('data.csv', (error, data) => {
   if(error) throw error;
+  
+  const button = chartG
+    .append('circle')
+    .attr('class', 'button')
+    .attr('cx', 100)
+    .attr('cy', 100)
+    .attr('r', 100)
+    .on('click', startDrip);
 
   // Create our node array
   const companyArray = data.map(function(d) {
@@ -50,8 +58,8 @@ d3.csv('data.csv', (error, data) => {
   };
 
   // Add the mousedown event to our SVG group
-  svg
-    .on('mousedown', mousedown);
+  // svg
+  //   .on('click', mousedown);
 
   // Set counter to keep track of clicks
   let counter = 0
@@ -66,7 +74,29 @@ d3.csv('data.csv', (error, data) => {
   let nodes = simulation.nodes();
   let node = chartG.selectAll('.node');
 
-  restart();
+  // restart();
+  let intervalID;
+  function startDrip(e) {
+
+
+    console.log(intervalID);
+
+    this.classList.toggle('clicked');
+
+    if (this.classList.contains('clicked')) {
+        // start interval
+      intervalID = setInterval(function (d) {
+        let node = { 'drip': 'Apple' };
+        nodes.push(node);
+        restart()
+      }, 1000);
+    } else {
+      console.log(intervalID);
+      // end interval
+      clearInterval(intervalID);
+    }
+    
+  }
 
   function mousedown() {
     let node = companyArray[counter];
@@ -81,30 +111,22 @@ d3.csv('data.csv', (error, data) => {
   }
 
   function restart() {
-    console.log('counter ', counter);
-
     // Apply the general update pattern to the nodes.
     node = node
       .data(nodes);
-
-    console.log(node.data());
-
     node
       .exit().remove();
-
     node = node
       .enter().append("circle")
-      .attr("r", d => circleRadius(d.profit_per_second))
+      .attr('r', 15)
+      // .attr("r", d => circleRadius(d.profit_per_second))
       .merge(node);
-
     // Update and restart the simulation.
     simulation
       .nodes(nodes);
-
     simulation
       .alpha(1)
       .restart();
-
     counter++;
   }
 })
