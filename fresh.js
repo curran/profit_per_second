@@ -34,12 +34,12 @@ d3.csv('data.csv', (error, data) => {
       'rank': parseInt(d.company_rank),
       'net_income': parseInt(d.net_income),
       'profit_per_second': parseFloat(d.profit_per_second),
-      'x': innerWidth / 2,
+      'x': innerWidth / 3,
       'y': 0
     }
   })
 
-  // What's the extent of our profit we'll use as our circel radius
+  // What's the extent of our profit we'll use as our circle radius
   const profitExtent = d3.extent(companyArray, d => d.profit_per_second);
 
   // Calculate the max area to be used in the range of our scale
@@ -57,56 +57,24 @@ d3.csv('data.csv', (error, data) => {
     return Math.sqrt(area / Math.PI);
   };
 
-  // Add the mousedown event to our SVG group
-  // svg
-  //   .on('click', mousedown);
-
   // Set counter to keep track of clicks
   let counter = 0
 
   // Create the simulation to move your nodes around 
   var simulation = d3.forceSimulation()
     .force("charge", d3.forceManyBody().strength(-30))
-    .force("x", d3.forceX(innerWidth / 2))
+    .force("x", d3.forceX(innerWidth))
     .force("y", d3.forceY(innerHeight))
     .on('tick', layoutTick);
 
+  // create an empty array to push nodes to
   let nodes = simulation.nodes();
   let node = chartG.selectAll('.node');
+  console.log(node);
 
-  // restart();
-  let intervalID;
-  function startDrip(e) {
-
-
-    console.log(intervalID);
-
-    this.classList.toggle('clicked');
-
-    if (this.classList.contains('clicked')) {
-        // start interval
-      intervalID = setInterval(function (d) {
-        let node = { 'drip': 'Apple' };
-        nodes.push(node);
-        restart()
-      }, 1000);
-    } else {
-      console.log(intervalID);
-      // end interval
-      clearInterval(intervalID);
-    }
-    
-  }
-
-  function mousedown() {
-    let node = companyArray[counter];
-    nodes.push(node);
-      restart();
-  }
-
-  function layoutTick(e) {
+  function layoutTick() {
     node
-      .attr('cx', d => d.x)
+      .attr('cx', innerWidth / 2)
       .attr('cy', d => d.y);
   }
 
@@ -114,11 +82,14 @@ d3.csv('data.csv', (error, data) => {
     // Apply the general update pattern to the nodes.
     node = node
       .data(nodes);
-    node
-      .exit().remove();
+    console.log(node);
+    // node
+    //   .exit().remove();
     node = node
       .enter().append("circle")
-      .attr('r', 15)
+      .attr('r', d => circleRadius(d.profit_per_second))
+      .attr('opacity', .1)
+      .attr('stroke', '#cccccc')
       // .attr("r", d => circleRadius(d.profit_per_second))
       .merge(node);
     // Update and restart the simulation.
@@ -127,6 +98,27 @@ d3.csv('data.csv', (error, data) => {
     simulation
       .alpha(1)
       .restart();
+  }
+
+  let intervalID;
+  let companyNode;
+  function startDrip(e) {
+    // toggle click class onto the button
+    this.classList.toggle('clicked');
+    companyNode = companyArray[counter];
+    if (this.classList.contains('clicked')) {
+      // start interval
+      intervalID = setInterval(function (d) {
+        companyNode.y = 0
+        let node = companyNode;
+        nodes.push(node);
+        restart()
+      }, 1000);
+    } else {
+      // end interval
+      clearInterval(intervalID);
+    }
     counter++;
   }
+
 })
