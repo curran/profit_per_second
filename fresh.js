@@ -81,27 +81,28 @@ d3.csv('data.csv', (error, data) => {
 
   // create an empty array to push nodes to
   let nodes = simulation.nodes();
-  let node = chartG.selectAll('.node');
-  console.log(node);
+  let node;
 
   restartSim()
 
   function layoutTick() {
-    node
-      .attr('cx', innerWidth / 2)
-      .attr('cy', d => d.y);
+    if (node) {
+      node.attr('cy', d => d.y);
+    }
   }
 
   function restartSim() {
     // Apply the general update pattern to the nodes.
-    node = node.data(nodes);
-    console.log(node);
+    node = chartG.selectAll('.node').data(nodes);
     node.exit().remove();
-    node = node.enter().append("circle")
-      .attr('r', d => circleRadius(d.profit_per_second))
-      .attr('opacity', .1)
-      .attr('stroke', '#cccccc')
-      .merge(node);
+    node = node
+      .enter().append("circle")
+        .attr('cx', innerWidth / 2)
+        .attr('opacity', .1)
+        .attr('stroke', '#cccccc')
+      .merge(node)
+        .attr('r', d => circleRadius(d.profit_per_second));
+    
     // Update and restart the simulation.
     simulation
       .nodes(nodes);
